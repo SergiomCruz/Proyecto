@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -243,37 +245,40 @@ public class RegistroM extends javax.swing.JFrame {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date dateStr = formatter.parse(dateString);
             java.sql.Date dateDB = new java.sql.Date(dateStr.getTime());
-            
-            
             FileInputStream fin = new FileInputStream(imageFile);
 
+            if (txt_nombre.getText().equals("") || txt_apellido.getText().equals("") || txt_Usuario.getText().equals("")
+                    || txt_contraseña.getText().equals("") || cmb_especialidad.getSelectedItem().toString().equals("")
+                    || getUserGenre().equals("") || dateDB.equals("") || imageFile.length() == 0) {
 
-            Connection con;
-            Conexion registercon = new Conexion();
-            con = registercon.getConnection();
-            String query = "insert into medicos (Nombre, Apellido, Usuario, Contraseña, Especialidad, Sexo, Fecha, Imagen) values" + "(?, ?, ?, ?, ?, ?, ?, ?)";
+                JOptionPane.showMessageDialog(null, "Llene todos los datos necesarios");
+            } else {
 
-            PreparedStatement pstm = con.prepareStatement(query);
-            //pstm.setInt(1,id);
-            pstm.setString(1, txt_nombre.getText().trim());
-            pstm.setString(2, txt_apellido.getText().trim());
-            pstm.setString(3, txt_Usuario.getText().trim());
-            pstm.setString(4, txt_contraseña.getText().trim());
-            pstm.setString(5, cmb_especialidad.getSelectedItem().toString());
-            pstm.setString(6, getUserGenre());
-            pstm.setDate(7, dateDB);
-            pstm.setBinaryStream(8,(InputStream)fin,(int)imageFile.length());
-            pstm.executeUpdate();
+                Connection con;
+                Conexion registercon = new Conexion();
+                con = registercon.getConnection();
+                String query = "insert into medicos (Nombre, Apellido, Usuario, Contraseña, Especialidad, Sexo, Fecha, Imagen) values" + "(?, ?, ?, ?, ?, ?, ?, ?)";
 
-            txt_nombre.setText("");
-            txt_apellido.setText("");
-            txt_Usuario.setText("");
-            txt_contraseña.setText("");
-            rbt_hombre.setText("");
-            rbt_Mujer.setText("");
+                PreparedStatement pstm = con.prepareStatement(query);
+                pstm.setString(1, txt_nombre.getText().trim());
+                pstm.setString(2, txt_apellido.getText().trim());
+                pstm.setString(3, txt_Usuario.getText().trim());
+                pstm.setString(4, txt_contraseña.getText().trim());
+                pstm.setString(5, cmb_especialidad.getSelectedItem().toString());
+                pstm.setString(6, getUserGenre());
+                pstm.setDate(7, dateDB);
+                pstm.setBinaryStream(8, (InputStream) fin, (int) imageFile.length());
+                pstm.executeUpdate();
 
-            label_status.setText("Registro exitoso.");
-
+                txt_nombre.setText("");
+                txt_apellido.setText("");
+                txt_Usuario.setText("");
+                txt_contraseña.setText("");
+                rbt_hombre.setText("");
+                rbt_Mujer.setText("");
+                label_status.setText("Registro exitoso.");
+                image = new JLabel();
+            }
         } catch (SQLException e) {
             Logger.getLogger(RegistroM.class.getName()).log(Level.SEVERE, null, e);
         } catch (ParseException ex) {
