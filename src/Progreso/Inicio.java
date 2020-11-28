@@ -11,7 +11,7 @@ package Progreso;
  */
 public class Inicio {
     
-    public static void main(String[] args){
+    public static void main(String[] arg){
         
         new Login().setVisible(true);
     }

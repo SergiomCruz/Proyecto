@@ -4,21 +4,65 @@
  * and open the template in the editor.
  */
 package Progreso;
+
+import clases.Conexion;
+import java.awt.Image;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author Sergio
  */
 public class RegistroM extends javax.swing.JFrame {
 
-        
+    File imageFile;
+
     /**
      * Creates new form RegistroM
      */
     public RegistroM() {
         initComponents();
         this.setLocationRelativeTo(null);//sentrar interfas grafica
-        
+        groupButton();
+    }
+
+    private void groupButton() {
+        ButtonGroup bg1 = new ButtonGroup();
+        bg1.add(rbt_hombre);
+        bg1.add(rbt_Mujer);
+
+    }
+
+    private String getUserGenre() {
+
+        String radioText = "";
+        if (rbt_hombre.isSelected()) {
+            radioText = rbt_hombre.getText();
+        }
+        if (rbt_Mujer.isSelected()) {
+            radioText = rbt_Mujer.getText();
+        }
+        return radioText;
+    }
+
+    public ImageIcon ResizeImage(String ImagePath) {
+        ImageIcon MyImage = new ImageIcon(ImagePath);
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(image.getWidth(), image.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        return image;
     }
 
     /**
@@ -52,7 +96,7 @@ public class RegistroM extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         label_status = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        image = new javax.swing.JLabel();
         jLabel_Wallpaper = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
@@ -136,6 +180,11 @@ public class RegistroM extends javax.swing.JFrame {
         rbt_hombre.setForeground(new java.awt.Color(255, 255, 255));
         rbt_hombre.setText("Hombre");
         rbt_hombre.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        rbt_hombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbt_hombreActionPerformed(evt);
+            }
+        });
         getContentPane().add(rbt_hombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, -1, -1));
 
         rbt_Mujer.setBackground(new java.awt.Color(102, 0, 102));
@@ -167,10 +216,15 @@ public class RegistroM extends javax.swing.JFrame {
         getContentPane().add(label_status, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 400, -1, -1));
 
         jButton1.setText("Cargar imagen ");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 370, -1, -1));
 
-        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 240, 130, 120));
+        image.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        getContentPane().add(image, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 240, 130, 120));
 
         jLabel_Wallpaper.setBackground(new java.awt.Color(255, 255, 255));
         jLabel_Wallpaper.setFont(new java.awt.Font("Arial", 1, 16)); // NOI18N
@@ -182,33 +236,72 @@ public class RegistroM extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        try{
-            Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_medico", "root", "");
-            PreparedStatement pst = cn.prepareStatement("INSERT INTO medicos"+"(Nombre,Apellido,Usuario,Contraseña,Especialidad, Sexo) VALUES"+"(?,?,?,?,?,?)");
+
+        try {
+            java.util.Date fecha = dtc_fecha.getDate();
+            String dateString = String.format("%1$td-%1$tm-%1$tY", fecha);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date dateStr = formatter.parse(dateString);
+            java.sql.Date dateDB = new java.sql.Date(dateStr.getTime());
             
-            pst.setString(1, txt_nombre.getText().trim());
-            pst.setString(2, txt_apellido.getText().trim());
-            pst.setString(3, txt_Usuario.getText().trim());
-            pst.setString(4, txt_contraseña.getText().trim());
-            pst.setString(5, cmb_especialidad.getSelectedItem().toString());
-            pst.setString(6, rbt_hombre.getText().trim());
-            pst.setString(6, rbt_Mujer.getText().trim());
-         // pst.setString(7, dtc_fecha.getText().trim());
-            pst.executeUpdate();
             
+            FileInputStream fin = new FileInputStream(imageFile);
+
+
+            Connection con;
+            Conexion registercon = new Conexion();
+            con = registercon.getConnection();
+            String query = "insert into medicos (Nombre, Apellido, Usuario, Contraseña, Especialidad, Sexo, Fecha, Imagen) values" + "(?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement pstm = con.prepareStatement(query);
+            //pstm.setInt(1,id);
+            pstm.setString(1, txt_nombre.getText().trim());
+            pstm.setString(2, txt_apellido.getText().trim());
+            pstm.setString(3, txt_Usuario.getText().trim());
+            pstm.setString(4, txt_contraseña.getText().trim());
+            pstm.setString(5, cmb_especialidad.getSelectedItem().toString());
+            pstm.setString(6, getUserGenre());
+            pstm.setDate(7, dateDB);
+            pstm.setBinaryStream(8,(InputStream)fin,(int)imageFile.length());
+            pstm.executeUpdate();
+
             txt_nombre.setText("");
             txt_apellido.setText("");
             txt_Usuario.setText("");
             txt_contraseña.setText("");
             rbt_hombre.setText("");
             rbt_Mujer.setText("");
-            
+
             label_status.setText("Registro exitoso.");
-        }catch(Exception e){
-            
+
+        } catch (SQLException e) {
+            Logger.getLogger(RegistroM.class.getName()).log(Level.SEVERE, null, e);
+        } catch (ParseException ex) {
+            Logger.getLogger(RegistroM.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(RegistroM.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void rbt_hombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbt_hombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbt_hombreActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        JFileChooser file = new JFileChooser();
+        file.setCurrentDirectory(new File(System.getProperty("user.home")));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png");
+        file.addChoosableFileFilter(filter);
+        int result = file.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            imageFile = file.getSelectedFile();
+            String path = imageFile.getAbsolutePath();
+            image.setIcon(ResizeImage(path));
+        } else if (result == JFileChooser.CANCEL_OPTION) {
+            System.out.println("No File Select");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,10 +341,10 @@ public class RegistroM extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmb_especialidad;
     private com.toedter.calendar.JDateChooser dtc_fecha;
+    private javax.swing.JLabel image;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Wallpaper;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;

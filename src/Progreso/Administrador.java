@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package Progreso;
+
 import java.sql.*;
+
 /**
  *
  * @author Sergio
@@ -22,7 +24,7 @@ public class Administrador extends javax.swing.JFrame {
         setResizable(false);//evita que el usuruario modifica las dimenciones de la interfaz
         setTitle("Acceso al sistema");//nombre de la interfaz
         setLocationRelativeTo(null);//Sentrar la interfaz
-        
+
     }
 
     /**
@@ -134,37 +136,37 @@ public class Administrador extends javax.swing.JFrame {
 
     private void btn_MedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_MedicoActionPerformed
         // TODO add your handling code here:
-        RegistroM res= new RegistroM();
+        RegistroM res = new RegistroM();
         res.setVisible(true);
         dispose();
     }//GEN-LAST:event_btn_MedicoActionPerformed
 
     private void btn_EnfermeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EnfermeroActionPerformed
         // TODO add your handling code here:
-        RegistroE res2= new RegistroE();
+        RegistroE res2 = new RegistroE();
         res2.setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_btn_EnfermeroActionPerformed
 
     private void btn_IngenieroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IngenieroActionPerformed
         // TODO add your handling code here:
-        RegistroI res3= new RegistroI();
+        RegistroI res3 = new RegistroI();
         res3.setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_btn_IngenieroActionPerformed
 
     private void btn_PacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PacienteActionPerformed
         // TODO add your handling code here:
-        RegistroP res4= new RegistroP();
+        RegistroP res4 = new RegistroP();
         res4.setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_btn_PacienteActionPerformed
 
     private void btn_EquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EquipoActionPerformed
         // TODO add your handling code here:
-        RegistroEq res5= new RegistroEq();
+        RegistroEq res5 = new RegistroEq();
         res5.setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_btn_EquipoActionPerformed
 
     /**

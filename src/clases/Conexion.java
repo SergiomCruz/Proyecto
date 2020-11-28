@@ -14,14 +14,25 @@ import java.sql.SQLException;
  * @author Sergio
  */
 public class Conexion {
-      public static Connection conectar(){
-        try{
-            Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_administrador", "root", "" );
-            return cn;
+
+    Connection con;
+
+    public Conexion() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Searching for connection class");
+        } catch (ClassNotFoundException cnf) {
+            System.out.println("Class not found and unable to connect" + cnf.getLocalizedMessage());
         }
-        catch (SQLException e){
+        try {
+             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_administrador", "root", "");
+        } catch (SQLException e) {
             System.out.println("Error en la conexion local" + e);
         }
-        return (null);
+    }
+
+    public Connection getConnection() {
+        return con;
     }
 }
+

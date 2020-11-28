@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package Progreso;
+
 import java.sql.*;
+
 /**
  *
  * @author Sergio

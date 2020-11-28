@@ -4,29 +4,27 @@
  * and open the template in the editor.
  */
 package Progreso;
+
 import java.sql.*;
 import javax.swing.JOptionPane;
 import clases.Conexion;
-
 
 /**
  *
  * @author Sergio
  */
 public class Login extends javax.swing.JFrame {
-    
-    public static String user = "";//permite mandar datos ente interfaces
-    String pass = "";
+
     /**
-     * Creates new form Inicio
+     * Creates new from
      */
     public Login() {
         initComponents();
-        setSize(400,550);//tamaño de la interfaz
+        setSize(400, 550);//tamaño de la interfaz
         setResizable(false);//evita que el usuruario modifica las dimenciones de la interfaz
         setTitle("Acceso al sistema");//nombre de la interfaz
         setLocationRelativeTo(null);//Sentrar la interfaz
-        
+
     }
 
     /**
@@ -95,15 +93,14 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_AccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AccederActionPerformed
         // TODO add your handling code here:
-        user = txt_Usuario.getText().trim();
-        pass = txt_Contraseña.getText().trim();
-        
-        if(user.equals("admin") && pass.equals("admin")){
-        
+        String user = txt_Usuario.getText().trim();
+        String pass = txt_Contraseña.getText().trim();
+
+        if (user.equals("admin") && pass.equals("admin")) {
+
             new Administrador().setVisible(true);
             dispose();
         }
-        
 
 //        if(!user.equals("") || !pass.equals("")){
 //        
@@ -144,8 +141,8 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_AccederActionPerformed
 
     private void txt_UsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_UsuarioActionPerformed
-    
-        
+
+
     }//GEN-LAST:event_txt_UsuarioActionPerformed
 
     private void txt_ContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ContraseñaActionPerformed

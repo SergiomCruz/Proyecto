@@ -16,7 +16,6 @@ public class RegistroEq extends javax.swing.JFrame {
      */
     public RegistroEq() {
         initComponents();
-                initComponents();
         setSize(620, 480);//tamaño de la interfaz
         setResizable(false);//evita que el usuruario modifica las dimenciones de la interfaz
         setTitle("Acceso al sistema");//nombre de la interfaz
