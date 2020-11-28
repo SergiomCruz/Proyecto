@@ -18,6 +18,7 @@ public class RegistroM extends javax.swing.JFrame {
     public RegistroM() {
         initComponents();
         this.setLocationRelativeTo(null);//sentrar interfas grafica
+        
     }
 
     /**
