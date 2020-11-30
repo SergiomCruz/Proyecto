@@ -30,6 +30,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class RegistroM extends javax.swing.JFrame {
 
     File imageFile;
+    final String cargo = "Medico";
 
     /**
      * Creates new form RegistroM
@@ -44,7 +45,6 @@ public class RegistroM extends javax.swing.JFrame {
         ButtonGroup bg1 = new ButtonGroup();
         bg1.add(rbt_hombre);
         bg1.add(rbt_Mujer);
-
     }
 
     private String getUserGenre() {
@@ -124,6 +124,11 @@ public class RegistroM extends javax.swing.JFrame {
         txt_nombre.setForeground(new java.awt.Color(255, 255, 255));
         txt_nombre.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txt_nombre.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txt_nombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_nombreActionPerformed(evt);
+            }
+        });
         getContentPane().add(txt_nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 210, -1));
 
         jbl_Apellido.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -240,24 +245,23 @@ public class RegistroM extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         try {
-            java.util.Date fecha = dtc_fecha.getDate();
-            String dateString = String.format("%1$td-%1$tm-%1$tY", fecha);
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date dateStr = formatter.parse(dateString);
-            java.sql.Date dateDB = new java.sql.Date(dateStr.getTime());
-            FileInputStream fin = new FileInputStream(imageFile);
-
-            if (txt_nombre.getText().equals("") || txt_apellido.getText().equals("") || txt_Usuario.getText().equals("")
-                    || txt_contraseña.getText().equals("") || cmb_especialidad.getSelectedItem().toString().equals("")
-                    || getUserGenre().equals("") || dateDB.equals("") || imageFile.length() == 0) {
-
+            if (txt_nombre.getText().isEmpty() || txt_apellido.getText().isEmpty() || txt_Usuario.getText().isEmpty()
+                    || txt_contraseña.getText().isEmpty() || cmb_especialidad.getSelectedItem().toString().isEmpty()
+                    || getUserGenre().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Llene todos los datos necesarios");
+                System.out.print("hello");
             } else {
+                java.util.Date fecha = dtc_fecha.getDate();
+                String dateString = String.format("%1$td-%1$tm-%1$tY", fecha);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date dateStr = formatter.parse(dateString);
+                java.sql.Date dateDB = new java.sql.Date(dateStr.getTime());
+                FileInputStream fin = new FileInputStream(imageFile);
 
                 Connection con;
                 Conexion registercon = new Conexion();
                 con = registercon.getConnection();
-                String query = "insert into medicos (Nombre, Apellido, Usuario, Contraseña, Especialidad, Sexo, Fecha, Imagen) values" + "(?, ?, ?, ?, ?, ?, ?, ?)";
+                String query = "insert into medico (Nombre, Apellido, Usuario, Contraseña, Especialidad, Sexo, Fecha, Imagen, Cargo) values" + "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 PreparedStatement pstm = con.prepareStatement(query);
                 pstm.setString(1, txt_nombre.getText().trim());
@@ -268,6 +272,7 @@ public class RegistroM extends javax.swing.JFrame {
                 pstm.setString(6, getUserGenre());
                 pstm.setDate(7, dateDB);
                 pstm.setBinaryStream(8, (InputStream) fin, (int) imageFile.length());
+                pstm.setString(9, cargo);
                 pstm.executeUpdate();
 
                 txt_nombre.setText("");
@@ -307,6 +312,10 @@ public class RegistroM extends javax.swing.JFrame {
             System.out.println("No File Select");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txt_nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_nombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_nombreActionPerformed
 
     /**
      * @param args the command line arguments
