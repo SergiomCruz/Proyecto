@@ -253,9 +253,11 @@ public class RegistroM extends javax.swing.JFrame {
             } else {
                 java.util.Date fecha = dtc_fecha.getDate();
                 String dateString = String.format("%1$td-%1$tm-%1$tY", fecha);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd:hh");
                 java.util.Date dateStr = formatter.parse(dateString);
+                
                 java.sql.Date dateDB = new java.sql.Date(dateStr.getTime());
+                
                 FileInputStream fin = new FileInputStream(imageFile);
 
                 Connection con;
